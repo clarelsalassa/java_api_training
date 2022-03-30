@@ -43,7 +43,8 @@ public class Sea {
 
     public boolean isDead() {
         int beforeUpdate = battleShips.size();
-        battleShips.forEach(ship -> {
+        battleShips.forEach(ship ->
+        {
             if (!ship.isLiving()) {
                 battleShips.remove(ship);
             }
@@ -56,8 +57,6 @@ public class Sea {
             return false;
         if (boardCell.charAt(0) < 'A' && boardCell.charAt(0) > 'J')
             return false;
-        if (boardCell.charAt(1) < '0' && boardCell.charAt(1) > '9')
-            return false;
-        return true;
+        return boardCell.charAt(1) >= '0' || boardCell.charAt(1) <= '9';
     }
 }

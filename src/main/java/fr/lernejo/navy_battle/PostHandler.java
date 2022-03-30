@@ -5,10 +5,6 @@ import com.sun.net.httpserver.HttpHandler;
 
 import com.sun.net.httpserver.HttpServer;
 import org.json.JSONObject;
-import org.json.JSONTokener;
-
-
-import java.io.InputStream;
 
 public class PostHandler implements HttpHandler {
 
@@ -31,8 +27,8 @@ public class PostHandler implements HttpHandler {
     public void handle(HttpExchange exchange) {
         JSONObject jsonRequest = server.parser.getRequest(exchange);
         if (server.parser.isValidBody(jsonRequest)) {
-            server.response("{\"id\": \"" + server.portNumber + "\",\"url\": \"http://localhost:" +
-                server.portNumber + "\",\"message\": \"May the best code win\"}", exchange, 202);
+            server.response("{\"id\": \"" + server.port + "\",\"url\": \"http://localhost:" +
+                server.port + "\",\"message\": \"May the best code win\"}", exchange, 202);
             String adversaryUrl = jsonRequest.getString("url");
             server.client.adversaryUrl.add(adversaryUrl);
             server.client.createGetRequest();

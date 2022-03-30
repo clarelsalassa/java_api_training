@@ -13,7 +13,8 @@ public class Attack {
         ArrayList<String> allAttacks = new ArrayList<>(100);
         for (char c = 'A'; c <= 'J'; c++){
             for (char d = '0'; d <= '9'; d++) {
-                allAttacks.add(String.valueOf(c) + d);
+                String firstValue = String.valueOf(c);
+                allAttacks.add(firstValue + d);
             }
         }
         return allAttacks;

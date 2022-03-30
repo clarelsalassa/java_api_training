@@ -6,7 +6,7 @@ public class BattleShips {
     final ArrayList<BoardCells> positions;
 
     public BattleShips(int nb, int X, int Y) {
-        positions = new ArrayList<BoardCells>(nb);
+        positions = new ArrayList<>(nb);
         if (Y > 7)
             Y = 7;
         if (X > 8)

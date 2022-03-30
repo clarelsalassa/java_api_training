@@ -10,13 +10,13 @@ import java.util.concurrent.Executors;
 
 
 public class Server {
-    final int portNumber;
+    final int port;
     final Parser parser;
     final Sea sea;
     final Client client;
 
     public Server(int portNumber) {
-        this.portNumber = portNumber;
+        port = portNumber;
         parser = new Parser();
         client = new Client();
         sea = new Sea();
@@ -25,11 +25,11 @@ public class Server {
     public HttpServer initServer() {
         HttpServer server;
         try {
-            server = HttpServer.create(new InetSocketAddress(portNumber), 1);
+            server = HttpServer.create(new InetSocketAddress(port), 1);
             return server;
         }
         catch (IOException e) {
-            System.err.println("Cannot create the server" + e);
+            System.err.println("Cannot create the server: " + e);
         }
         return null;
     }

@@ -5,7 +5,7 @@ public enum State {
     SUNK,
     MISS;
 
-    public String stateToString() {
+    public String stateOfShips() {
         return switch (this) {
             case HIT -> "hit";
             case SUNK -> "sunk";

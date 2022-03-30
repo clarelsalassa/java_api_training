@@ -28,7 +28,7 @@ public class GetHandler implements HttpHandler {
         exchange.getResponseHeaders().set("Content-Type", "application/json");
         URI requestURI = exchange.getRequestURI();
         String boardCell = requestURI.toString().split("=")[1];
-        String results = server.sea.touchedBoardCell(boardCell).stateToString();
+        String results = server.sea.touchedBoardCell(boardCell).stateOfShips();
         boolean shipsLeft = server.sea.isLeft();
         server.response("{\"consequence\": \"" + results + "\", \"shipLeft\": " + shipsLeft + "}", exchange, 200);
         if (shipsLeft) {
