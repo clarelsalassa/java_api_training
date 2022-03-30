@@ -4,41 +4,42 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import com.sun.net.httpserver.HttpServer;
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 public class PostHandler implements HttpHandler {
+
+    private final Server server;
+
+    public PostHandler(Server server) {
+        this.server = server;
+    }
+
+    public void postContext(HttpServer httpServer) {
+        httpServer.createContext("/api/game/start", exchange -> {
+            if (!"POST".equals(exchange.getRequestMethod())) {
+                server.response("Bad POST Method", exchange, 404);
+                return;
+            }
+            handle(exchange);
+        });
+    }
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        String bodyPass = "Accepted";
-        String bodyBad = "Bad request";
+    public void handle(HttpExchange exchange) {
         InputStream stream = exchange.getRequestBody();
         JSONObject inSchema = new JSONObject(new JSONTokener(stream));
-
-        try (InputStream inputStream = getClass().getResourceAsStream("/schemaPost.json")) {
-            JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
-            Schema schema = SchemaLoader.load(rawSchema);
-            schema.validate(inSchema);
-            exchange.getResponseHeaders().set("Accept", "application/json");
-            exchange.sendResponseHeaders(202, bodyPass.length());
-
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(bodyPass.getBytes());
-            }
-        } catch (ValidationException e) {
-
-            exchange.sendResponseHeaders(400, bodyBad.length());
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(bodyBad.getBytes());
-            }
+        JSONObject jsonRequest = server.parser.getRequest(exchange);
+        if (server.parser.isValidBody(jsonRequest)) {
+            server.response("{\"id\": \"" + server.portNumber + "\",\"url\": \"http://localhost:" +
+                server.portNumber + "\",\"message\": \"May the best code win\"}", exchange, 202);
+            String adversaryUrl = jsonRequest.getString("url");
+            server.client.adversaryUrl.add(adversaryUrl);
+            server.client.createGetRequest();
         }
+        else
+            server.response("Bad request", exchange, 400);
     }
 }

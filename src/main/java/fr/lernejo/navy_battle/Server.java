@@ -1,27 +1,65 @@
 package fr.lernejo.navy_battle;
 
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class Server {
+    final int portNumber;
+    final Parser parser;
+    final Sea sea;
+    final Client client;
 
-    public HttpServer createServer(int port) throws IOException {
-        if (port < 1024 || port > 65535){
-            System.out.println("That port number is invalid");
-            System.out.println("Enter a port number between 1024 and 65535:");
+    public Server(int portNumber) {
+        this.portNumber = portNumber;
+        parser = new Parser();
+        client = new Client();
+        sea = new Sea();
+    }
+
+    public HttpServer initServer() {
+        HttpServer server;
+        try {
+            server = HttpServer.create(new InetSocketAddress(portNumber), 0);
+            return server;
         }
-        // Create server
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        ExecutorService executor = Executors.newFixedThreadPool(1);
-        server.setExecutor(executor);
-        server.createContext("/ping", new PingHandler());
-        server.createContext("/api/game/start", new PostHandler());
+        catch (IOException e) {
+            System.err.println("Cannot create the server" + e);
+        }
+        return null;
+    }
 
-        return server;
+    public boolean runServer() throws IOException {
+        HttpServer server = initServer();
+        if (server == null){
+            return false;
+        }
+        server.setExecutor(Executors.newFixedThreadPool(1));
+        new PingHandler(this).pingContext(server);
+        new PostHandler(this).postContext(server);
+        new GetHandler(this).getContext(server);
+
+        server.start();
+        return true;
+    }
+
+    public void response(String body, HttpExchange exchange, int resp) {
+        try {
+            exchange.sendResponseHeaders(resp, body.length());
+        }
+        catch (IOException e){
+            System.err.println("Header problem: " + e);
+        }
+        try (OutputStream os = exchange.getResponseBody()){
+            os.write(body.getBytes());
+        }
+        catch (IOException e) {
+            System.err.println("Message problem: " + e);
+        }
     }
 }
