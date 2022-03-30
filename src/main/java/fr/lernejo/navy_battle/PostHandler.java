@@ -29,8 +29,6 @@ public class PostHandler implements HttpHandler {
     }
     @Override
     public void handle(HttpExchange exchange) {
-        InputStream stream = exchange.getRequestBody();
-        JSONObject inSchema = new JSONObject(new JSONTokener(stream));
         JSONObject jsonRequest = server.parser.getRequest(exchange);
         if (server.parser.isValidBody(jsonRequest)) {
             server.response("{\"id\": \"" + server.portNumber + "\",\"url\": \"http://localhost:" +

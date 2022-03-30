@@ -25,7 +25,7 @@ public class Server {
     public HttpServer initServer() {
         HttpServer server;
         try {
-            server = HttpServer.create(new InetSocketAddress(portNumber), 0);
+            server = HttpServer.create(new InetSocketAddress(portNumber), 1);
             return server;
         }
         catch (IOException e) {

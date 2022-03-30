@@ -29,7 +29,7 @@ public class Parser {
             }
         }
         catch (IOException e) {
-            System.err.println(e);
+            System.err.println("No schema: " +  e);
         }
         return false;
     }
