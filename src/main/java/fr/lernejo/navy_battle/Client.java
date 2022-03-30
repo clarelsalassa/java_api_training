@@ -23,15 +23,10 @@ public class Client {
 
     public boolean createPostRequest(String adversaryUrl, String myPort){
         this.adversaryUrl.add(adversaryUrl);
-        HttpRequest newRequest = HttpRequest.newBuilder()
-            .uri(URI.create(adversaryUrl + "/api/game/start"))
-            .setHeader("Accept", "application/json")
-            .setHeader("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"1\", \"url\":\"http://localhost:" + myPort + "\", \"message\":\"hello\"}"))
+        HttpRequest newRequest = HttpRequest.newBuilder().uri(URI.create(adversaryUrl + "/api/game/start")).setHeader("Accept", "application/json").setHeader("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString("{\"id\":\"1\", \"url\":\"http://localhost:" + myPort + "\", \"message\":\"hello\"}"))
             .build();
         try {
-            client.sendAsync(newRequest, HttpResponse.BodyHandlers.ofString())
-                .thenAccept(r -> System.out.println(r.statusCode()));
+            client.sendAsync(newRequest, HttpResponse.BodyHandlers.ofString()).thenAccept(r -> System.out.println(r.statusCode()));
             return true;
         }
         catch (Exception e) {

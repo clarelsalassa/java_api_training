@@ -40,13 +40,9 @@ public class Server {
             return false;
         }
         server.setExecutor(Executors.newFixedThreadPool(1));
-        PingHandler pingHandler = new PingHandler(this);
-        PostHandler postHandler = new PostHandler(this);
-        GetHandler getHandler = new GetHandler(this);
-
-        pingHandler.pingContext(server);
-        postHandler.postContext(server);
-        getHandler.getContext(server);
+        new PingHandler(this).pingContext(server);
+        new PostHandler(this).postContext(server);
+        new GetHandler(this).getContext(server);
 
         server.start();
         return true;
