@@ -7,7 +7,6 @@ public class Launcher {
         if (args.length >= 1) {
             int portNumber = Integer.parseInt(args[0]);
             if (portNumber < 1024 || portNumber > 65535){
-                System.err.println("That port number is invalid");
                 System.err.println("Enter a port number between 1024 and 65535:");
                 return;
             }
@@ -19,5 +18,6 @@ public class Launcher {
         }
         else
             System.err.println("No argument, program needs 1 or 2 arguments to be launched");
+
     }
 }
