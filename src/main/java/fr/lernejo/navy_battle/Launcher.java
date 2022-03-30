@@ -7,7 +7,7 @@ public class Launcher {
         if (args.length >= 1) {
             int portNumber = Integer.parseInt(args[0]);
             if (portNumber < 1024 || portNumber > 65535){
-                System.err.println("Enter a port number between 1024 and 65535:");
+                System.err.println("Enter port number between 1024 and 65535:");
                 return;
             }
             Server newServer = new Server(portNumber);
